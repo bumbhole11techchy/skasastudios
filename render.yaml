@@ -15,52 +15,52 @@ services:
         value: 20
 
       - key: MONGODB_URI
-        sync: false
+        sync: true
 
       - key: RAZORPAY_KEY_ID
-        sync: false
+        sync: true
 
       - key: RAZORPAY_KEY_SECRET
-        sync: false
+        sync: true
 
       - key: CLOUDINARY_CLOUD_NAME
-        sync: false
+        sync: true
 
       - key: CLOUDINARY_API_KEY
-        sync: false
+        sync: true
 
       - key: CLOUDINARY_API_SECRET
-        sync: false
+        sync: true
 
       - key: ADMIN_SECRET
-        sync: false
+        sync: true
 
       - key: EMAIL_SERVICE
-        sync: false
+        sync: true
 
       - key: EMAIL_USER
-        sync: false
+        sync: true
 
       - key: EMAIL_PASSWORD
-        sync: false
+        sync: true
 
       - key: EMAIL_FROM
-        sync: false
+        sync: true
 
       - key: ADMIN_EMAIL
-        sync: false
+        sync: true
 
       - key: TWILIO_ACCOUNT_SID
-        sync: false
+        sync: true
 
       - key: TWILIO_AUTH_TOKEN
-        sync: false
+        sync: true
 
       - key: TWILIO_WHATSAPP_FROM
-        sync: false
+        sync: true
 
       - key: ADMIN_WHATSAPP_NUMBER
-        sync: false
+        sync: true
 
       - key: NEXT_PUBLIC_APP_URL
-        sync: false
+        sync: true
