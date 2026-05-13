@@ -220,7 +220,7 @@ export default function ProductsPage() {
     fetchProducts();
   }, [category]);
 
-  const filteredProducts = products.filter((product: any) =>
+  const filteredProducts = products?.filter((product: any) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
