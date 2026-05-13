@@ -6,6 +6,61 @@ services:
     plan: free
 
     buildCommand: npm install && npm run build
-    startCommand: npm start
+    startCommand: npm run start
 
     autoDeploy: true
+
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+
+      - key: MONGODB_URI
+        sync: false
+
+      - key: RAZORPAY_KEY_ID
+        sync: false
+
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+
+      - key: CLOUDINARY_API_KEY
+        sync: false
+
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+      - key: ADMIN_SECRET
+        sync: false
+
+      - key: EMAIL_SERVICE
+        sync: false
+
+      - key: EMAIL_USER
+        sync: false
+
+      - key: EMAIL_PASSWORD
+        sync: false
+
+      - key: EMAIL_FROM
+        sync: false
+
+      - key: ADMIN_EMAIL
+        sync: false
+
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
+
+      - key: ADMIN_WHATSAPP_NUMBER
+        sync: false
+
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
