@@ -22,6 +22,6 @@ export function hasValidAdminCookie(request: NextRequest): boolean {
     throw new Error('Please define ADMIN_SECRET in your environment variables');
   }
 
-  const adminCookie = request.cookies.get('admin_session');
+  const adminCookie = request.cookies.get('admin_auth');
   return adminCookie?.value === ADMIN_SECRET;
 }
