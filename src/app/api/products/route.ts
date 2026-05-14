@@ -2,18 +2,23 @@ import { connectDB } from '@/backend/lib/mongodb';
 import { Product } from '@/backend/models/Product';
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadImage } from '@/backend/lib/cloudinary';
-import { isAdminRequest } from '@/backend/lib/adminAuth';
+import {
+  isAdminRequest,
+  hasValidAdminCookie,
+} from '@/backend/lib/adminAuth';
 
 export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
     const { searchParams } = new URL(request.url);
+
     const category = searchParams.get('category');
     const limit = parseInt(searchParams.get('limit') || '12');
     const page = parseInt(searchParams.get('page') || '1');
 
     let query: any = {};
+
     if (category) {
       query.category = category;
     }
@@ -33,8 +38,10 @@ export async function GET(request: NextRequest) {
       pages: Math.ceil(total / limit),
       currentPage: page,
     });
+
   } catch (error) {
     console.error('Error fetching products:', error);
+
     return NextResponse.json(
       { error: 'Failed to fetch products' },
       { status: 500 }
@@ -46,11 +53,21 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    if (!isAdminRequest(request)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Allow authentication using either:
+    // 1. Bearer token
+    // 2. Admin auth cookie
+    if (
+      !isAdminRequest(request) &&
+      !hasValidAdminCookie(request)
+    ) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const body = await request.json();
+
     const {
       name,
       description,
@@ -72,28 +89,40 @@ export async function POST(request: NextRequest) {
     };
 
     if (!imageData) {
-      return NextResponse.json({ error: 'Image data is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Image data is required' },
+        { status: 400 }
+      );
     }
 
+    // Upload image to Cloudinary
     const uploadResult = await uploadImage(imageData);
-    const image = uploadResult;
 
+    // Create product
     const product = new Product({
       name,
       description,
       price: parseFloat(price),
-      originalPrice: originalPrice ? parseFloat(originalPrice) : undefined,
+      originalPrice: originalPrice
+        ? parseFloat(originalPrice)
+        : undefined,
       category,
-      stock: stock ? parseInt(stock, 10) : 0,
+      stock: stock
+        ? parseInt(stock, 10)
+        : 0,
       sku,
-      image,
+      image: uploadResult,
     });
 
     await product.save();
 
-    return NextResponse.json(product, { status: 201 });
+    return NextResponse.json(product, {
+      status: 201,
+    });
+
   } catch (error) {
     console.error('Error creating product:', error);
+
     return NextResponse.json(
       { error: 'Failed to create product' },
       { status: 500 }
