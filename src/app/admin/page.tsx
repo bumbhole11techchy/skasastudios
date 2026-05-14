@@ -33,12 +33,12 @@ const PRODUCT_CATEGORIES = [
   'Custom Collections',
 ];
 
-const warmStyles = `
+const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
 
   .admin-wrap {
     min-height: 100vh;
-    background: linear-gradient(150deg, #fdf8f0 0%, #fef5e4 50%, #fdf0dc 100%);
+    background: linear-gradient(150deg, #f4f7f3 0%, #edf2eb 50%, #e6ede4 100%);
     font-family: 'Jost', sans-serif;
     position: relative;
   }
@@ -55,14 +55,14 @@ const warmStyles = `
   .admin-card {
     position: relative;
     z-index: 1;
-    background: linear-gradient(145deg, #fffdf8 0%, #fdf8ee 100%);
-    border: 1px solid #e8d5a8;
+    background: linear-gradient(145deg, rgba(255,255,255,0.78) 0%, rgba(237,242,235,0.65) 100%);
+    border: 1px solid rgba(142,165,140,0.4);
     border-radius: 4px;
     box-shadow:
-      0 2px 4px #c9a84c0a,
-      0 8px 32px #c9a84c12,
-      0 32px 64px #c9a84c08,
-      inset 0 1px 0 #fff8ec;
+      0 2px 12px rgba(52,76,61,0.05),
+      0 8px 32px rgba(52,76,61,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.8);
+    backdrop-filter: blur(4px);
   }
 
   .admin-card::before {
@@ -70,122 +70,124 @@ const warmStyles = `
     position: absolute;
     inset: -1px;
     border-radius: 4px;
-    background: linear-gradient(135deg, #d4a84b33, transparent 40%, transparent 60%, #d4a84b22);
+    background: linear-gradient(135deg, rgba(142,165,140,0.2), transparent 40%, transparent 60%, rgba(115,138,110,0.12));
     pointer-events: none;
     z-index: -1;
   }
 
   .serif-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    color: #2c1a0e;
+    color: #344C3D;
     font-weight: 400;
     letter-spacing: 0.04em;
   }
 
-  .gold-label {
+  .sage-label {
     font-family: 'Jost', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #8a6020;
+    color: #738A6E;
   }
 
-  .warm-input {
+  .sage-input {
     width: 100%;
-    background: #fffcf5;
-    border: 1px solid #ddc87a66;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(115,138,110,0.35);
     border-radius: 2px;
     padding: 10px 14px;
     font-family: 'Jost', sans-serif;
     font-size: 0.9rem;
     font-weight: 300;
-    color: #3a2410;
+    color: #1e3028;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     margin-top: 6px;
+    box-sizing: border-box;
   }
 
-  .warm-input:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px #c9a84c18;
-    background: #fffef9;
+  .sage-input:focus {
+    border-color: #738A6E;
+    box-shadow: 0 0 0 3px rgba(115,138,110,0.12);
+    background: #ffffff;
   }
 
-  .warm-input::placeholder {
-    color: #c4a882;
+  .sage-input::placeholder {
+    color: #a8c0a4;
   }
 
-  .warm-select {
+  .sage-select {
     width: 100%;
-    background: #fffcf5;
-    border: 1px solid #ddc87a66;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(115,138,110,0.35);
     border-radius: 2px;
     padding: 10px 14px;
     font-family: 'Jost', sans-serif;
     font-size: 0.9rem;
     font-weight: 300;
-    color: #3a2410;
+    color: #1e3028;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     margin-top: 6px;
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c9a84c' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23738A6E' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
     padding-right: 36px;
+    box-sizing: border-box;
   }
 
-  .warm-select:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px #c9a84c18;
-    background-color: #fffef9;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c9a84c' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  .sage-select:focus {
+    border-color: #738A6E;
+    box-shadow: 0 0 0 3px rgba(115,138,110,0.12);
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23738A6E' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 12px center;
   }
 
-  .warm-select option {
-    background: #fffcf5;
-    color: #3a2410;
+  .sage-select option {
+    background: #ffffff;
+    color: #1e3028;
     font-family: 'Jost', sans-serif;
     font-weight: 300;
     padding: 8px;
   }
 
-  .warm-textarea {
+  .sage-textarea {
     resize: none;
     height: 100px;
   }
 
-  .gold-btn {
+  .primary-btn {
     width: 100%;
-    background: linear-gradient(135deg, #c9a84c 0%, #a8832a 100%);
-    color: #fff8ec;
+    background: #344C3D;
+    color: #BFCFBB;
     border: none;
     border-radius: 2px;
     padding: 14px 20px;
     font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
-    box-shadow: 0 4px 16px #c9a84c44;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(52,76,61,0.2);
   }
 
-  .gold-btn:hover {
-    opacity: 0.9;
+  .primary-btn:hover {
+    background: #2a3d31;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px #c9a84c55;
+    box-shadow: 0 6px 20px rgba(52,76,61,0.28);
   }
 
   .ghost-btn {
     background: transparent;
-    border: 1px solid #c9a84c88;
-    color: #8a6020;
+    border: 1px solid rgba(115,138,110,0.5);
+    color: #738A6E;
     border-radius: 2px;
     padding: 9px 20px;
     font-family: 'Jost', sans-serif;
@@ -194,12 +196,13 @@ const warmStyles = `
     letter-spacing: 0.16em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
 
   .ghost-btn:hover {
-    background: #c9a84c11;
-    color: #6b4a10;
+    background: rgba(115,138,110,0.1);
+    color: #344C3D;
+    border-color: rgba(115,138,110,0.7);
   }
 
   .ornament-divider {
@@ -214,26 +217,36 @@ const warmStyles = `
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #c9a84c55, transparent);
+    background: linear-gradient(90deg, transparent, rgba(142,165,140,0.5), transparent);
   }
 
   .ornament-dot {
     width: 5px;
     height: 5px;
-    background: #c9a84c;
+    background: #738A6E;
     transform: rotate(45deg);
     flex-shrink: 0;
   }
 
   .status-bar {
-    background: linear-gradient(90deg, #fdf6e3, #fef9ed);
-    border: 1px solid #e8d5a888;
+    background: linear-gradient(90deg, rgba(237,242,235,0.7), rgba(244,247,243,0.5));
+    border: 1px solid rgba(142,165,140,0.3);
     border-radius: 2px;
     padding: 10px 16px;
     font-size: 0.82rem;
     font-weight: 400;
-    color: #6b4a10;
+    color: #344C3D;
     letter-spacing: 0.03em;
+    position: relative;
+  }
+
+  .status-bar::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, rgba(142,165,140,0.6), transparent);
+    border-radius: 2px 0 0 2px;
   }
 
   .file-input-wrap {
@@ -245,22 +258,23 @@ const warmStyles = `
     width: 100%;
     font-family: 'Jost', sans-serif;
     font-size: 0.82rem;
-    color: #6b4a10;
-    background: #fffcf5;
-    border: 1px dashed #c9a84c88;
+    color: #4a6552;
+    background: rgba(255,255,255,0.85);
+    border: 1px dashed rgba(115,138,110,0.5);
     border-radius: 2px;
     padding: 10px 14px;
     cursor: pointer;
     transition: border-color 0.2s;
+    box-sizing: border-box;
   }
 
   .file-input-wrap input[type="file"]:hover {
-    border-color: #c9a84c;
+    border-color: #738A6E;
   }
 
   .file-input-wrap input[type="file"]::file-selector-button {
-    background: linear-gradient(135deg, #c9a84c, #a8832a);
-    color: #fff8ec;
+    background: #344C3D;
+    color: #BFCFBB;
     border: none;
     border-radius: 2px;
     padding: 5px 14px;
@@ -277,14 +291,14 @@ const warmStyles = `
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #a0722a;
-    border: 1px solid #d4a84b55;
+    color: #738A6E;
+    border: 1px solid rgba(115,138,110,0.38);
     padding: 3px 12px;
     border-radius: 2px;
-    background: #fff9f0;
+    background: rgba(191,207,187,0.2);
   }
 
   .loading-screen {
@@ -292,24 +306,25 @@ const warmStyles = `
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(150deg, #fdf8f0, #fef5e4, #fdf0dc);
+    background: linear-gradient(150deg, #f4f7f3 0%, #edf2eb 50%, #e6ede4 100%);
     font-family: 'Jost', sans-serif;
   }
 
   .loading-card {
-    background: linear-gradient(145deg, #fffdf8, #fdf8ee);
-    border: 1px solid #e8d5a8;
+    background: linear-gradient(145deg, rgba(255,255,255,0.78), rgba(237,242,235,0.65));
+    border: 1px solid rgba(142,165,140,0.4);
     border-radius: 4px;
     padding: 36px 48px;
-    box-shadow: 0 8px 40px #c9a84c14;
+    box-shadow: 0 8px 40px rgba(52,76,61,0.08);
     text-align: center;
+    backdrop-filter: blur(4px);
   }
 
   .loading-spinner {
     width: 28px;
     height: 28px;
-    border: 2px solid #e8d5a8;
-    border-top-color: #c9a84c;
+    border: 2px solid rgba(142,165,140,0.3);
+    border-top-color: #738A6E;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
     margin: 0 auto 16px;
@@ -332,16 +347,13 @@ export default function AdminPage() {
     async function verify() {
       try {
         const response = await fetch('/api/admin/verify');
-        if (response.ok) {
-          setIsLoggedIn(true);
-        }
+        if (response.ok) setIsLoggedIn(true);
       } catch {
         setIsLoggedIn(false);
       } finally {
         setLoading(false);
       }
     }
-
     verify();
   }, []);
 
@@ -419,7 +431,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <>
-        <style suppressHydrationWarning>{warmStyles}</style>
+        <style suppressHydrationWarning>{styles}</style>
         <div className="loading-screen">
           <div className="loading-card">
             <div className="loading-spinner" />
@@ -433,13 +445,12 @@ export default function AdminPage() {
   if (!isLoggedIn) {
     return (
       <>
-        <style suppressHydrationWarning>{warmStyles}</style>
+        <style suppressHydrationWarning>{styles}</style>
         <div className="admin-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
           <div className="admin-card" style={{ width: '100%', maxWidth: '420px', padding: '48px 40px' }}>
 
-            {/* Header */}
             <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-              <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#a0722a', marginBottom: '10px' }}>
+              <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#738A6E', marginBottom: '10px' }}>
                 ✦ &nbsp; Skasastudios &nbsp; ✦
               </p>
               <h1 className="serif-title" style={{ fontSize: '2.2rem', lineHeight: 1.2 }}>
@@ -448,31 +459,31 @@ export default function AdminPage() {
               <div className="ornament-divider" style={{ marginTop: '16px' }}>
                 <div className="ornament-dot" />
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#8a6020', letterSpacing: '0.04em', fontWeight: 300 }}>
+              <p style={{ fontSize: '0.8rem', color: '#4a6552', letterSpacing: '0.04em', fontWeight: 300 }}>
                 Enter your credentials to continue
               </p>
             </div>
 
             <form onSubmit={handleLogin}>
               <label className="block" style={{ marginBottom: '20px' }}>
-                <span className="gold-label">Admin Password</span>
+                <span className="sage-label">Admin Password</span>
                 <input
                   id="adminPassword"
                   type="password"
-                  className="warm-input"
+                  className="sage-input"
                   placeholder="••••••••••••"
                   value={loginPassword}
                   onChange={(event) => setLoginPassword(event.target.value)}
                   required
                 />
               </label>
-              <button type="submit" className="gold-btn">
+              <button type="submit" className="primary-btn">
                 Sign In
               </button>
             </form>
 
             {statusMessage && (
-              <div className="status-bar" style={{ marginTop: '16px', color: '#9b3a1a' }}>
+              <div className="status-bar" style={{ marginTop: '16px' }}>
                 {statusMessage}
               </div>
             )}
@@ -484,7 +495,7 @@ export default function AdminPage() {
 
   return (
     <>
-      <style suppressHydrationWarning>{warmStyles}</style>
+      <style suppressHydrationWarning>{styles}</style>
       <div className="admin-wrap" style={{ padding: '2.5rem 1.5rem' }}>
         <div className="admin-card" style={{ maxWidth: '860px', margin: '0 auto', padding: '48px 44px' }}>
 
@@ -499,8 +510,8 @@ export default function AdminPage() {
                 <h1 className="serif-title" style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', lineHeight: 1.15 }}>
                   Upload New Product
                 </h1>
-                <p style={{ marginTop: '8px', fontSize: '0.82rem', color: '#8a6020', fontWeight: 300, letterSpacing: '0.02em' }}>
-                  Add product details and upload images — stored via Cloudinary & MongoDB.
+                <p style={{ marginTop: '8px', fontSize: '0.82rem', color: '#4a6552', fontWeight: 300, letterSpacing: '0.02em' }}>
+                  Add product details and upload images — stored via Cloudinary &amp; MongoDB.
                 </p>
               </div>
               <button type="button" onClick={handleLogout} className="ghost-btn">
@@ -518,22 +529,22 @@ export default function AdminPage() {
             {/* Name + SKU */}
             <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
               <label className="block">
-                <span className="gold-label">Product Name</span>
+                <span className="sage-label">Product Name</span>
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(event) => setFormData({ ...formData, name: event.target.value })}
-                  className="warm-input"
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="sage-input"
                   required
                 />
               </label>
               <label className="block">
-                <span className="gold-label">SKU</span>
+                <span className="sage-label">SKU</span>
                 <input
                   type="text"
                   value={formData.sku}
-                  onChange={(event) => setFormData({ ...formData, sku: event.target.value })}
-                  className="warm-input"
+                  onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+                  className="sage-input"
                   required
                 />
               </label>
@@ -541,11 +552,11 @@ export default function AdminPage() {
 
             {/* Description */}
             <label className="block">
-              <span className="gold-label">Description</span>
+              <span className="sage-label">Description</span>
               <textarea
                 value={formData.description}
-                onChange={(event) => setFormData({ ...formData, description: event.target.value })}
-                className="warm-input warm-textarea"
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="sage-input sage-textarea"
                 required
               />
             </label>
@@ -553,33 +564,33 @@ export default function AdminPage() {
             {/* Price + Original Price + Stock */}
             <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))' }}>
               <label className="block">
-                <span className="gold-label">Price</span>
+                <span className="sage-label">Price</span>
                 <input
                   type="number"
                   step="0.01"
                   value={formData.price}
-                  onChange={(event) => setFormData({ ...formData, price: event.target.value })}
-                  className="warm-input"
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  className="sage-input"
                   required
                 />
               </label>
               <label className="block">
-                <span className="gold-label">Original Price</span>
+                <span className="sage-label">Original Price</span>
                 <input
                   type="number"
                   step="0.01"
                   value={formData.originalPrice}
-                  onChange={(event) => setFormData({ ...formData, originalPrice: event.target.value })}
-                  className="warm-input"
+                  onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
+                  className="sage-input"
                 />
               </label>
               <label className="block">
-                <span className="gold-label">Stock</span>
+                <span className="sage-label">Stock</span>
                 <input
                   type="number"
                   value={formData.stock}
-                  onChange={(event) => setFormData({ ...formData, stock: event.target.value })}
-                  className="warm-input"
+                  onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                  className="sage-input"
                 />
               </label>
             </div>
@@ -587,27 +598,25 @@ export default function AdminPage() {
             {/* Category + Image */}
             <div style={{ display: 'grid', gap: '16px', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))' }}>
               <label className="block">
-                <span className="gold-label">Category</span>
+                <span className="sage-label">Category</span>
                 <select
                   value={formData.category}
-                  onChange={(event) => setFormData({ ...formData, category: event.target.value })}
-                  className="warm-select"
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="sage-select"
                   required
                 >
                   {PRODUCT_CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
+                    <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
               </label>
               <label className="block">
-                <span className="gold-label">Product Image</span>
+                <span className="sage-label">Product Image</span>
                 <div className="file-input-wrap">
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(event) => setSelectedFile(event.target.files?.[0] || null)}
+                    onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
                     required
                   />
                 </div>
@@ -619,8 +628,8 @@ export default function AdminPage() {
               <div className="ornament-dot" />
             </div>
 
-            <button type="submit" className="gold-btn">
-              Upload Product
+            <button type="submit" className="primary-btn">
+              ✦ &nbsp; Upload Product
             </button>
 
             {statusMessage && (
@@ -628,8 +637,8 @@ export default function AdminPage() {
                 {statusMessage}
               </div>
             )}
-          </form>
 
+          </form>
         </div>
       </div>
     </>

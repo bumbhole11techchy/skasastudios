@@ -4,220 +4,281 @@ import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-const warmStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+/* ─── tokens ──────────────────────────────────────────── */
+const C = {
+  sageHint:  '#BFCFBB',
+  sage:      '#8EA58C',
+  moss:      '#738A6E',
+  evergreen: '#344C3D',
+  bg:        'linear-gradient(150deg, #f4f7f3 0%, #edf2eb 50%, #e6ede4 100%)',
+  bgCard:    'linear-gradient(145deg, rgba(255,255,255,0.78) 0%, rgba(237,242,235,0.65) 100%)',
+  textDark:  '#1e3028',
+  textMid:   '#4a6552',
+  textLight: '#7a9a82',
+  border:    'rgba(142,165,140,0.4)',
+  borderSoft:'rgba(142,165,140,0.22)',
+};
 
-  .contact-wrap {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(150deg, #fdf8f0 0%, #fef5e4 50%, #fdf0dc 100%);
-    font-family: 'Jost', sans-serif;
-    position: relative;
-  }
+/* ─── styles ──────────────────────────────────────────── */
+const S = {
+  page: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    background: C.bg,
+    fontFamily: "'Jost', sans-serif",
+  } as React.CSSProperties,
 
-  .contact-wrap::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
+  inner: {
+    flex: 1,
+    maxWidth: '960px',
+    margin: '0 auto',
+    width: '100%',
+    padding: '3rem 1.5rem',
+  } as React.CSSProperties,
 
-  .contact-inner {
-    flex: 1;
-    max-width: 960px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 3rem 1.5rem;
-    position: relative;
-    z-index: 1;
-  }
+  tagPill: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    fontSize: '0.65rem',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    color: C.moss,
+    border: `1px solid rgba(115,138,110,0.38)`,
+    padding: '3px 12px',
+    borderRadius: '2px',
+    background: 'rgba(191,207,187,0.2)',
+    marginBottom: '12px',
+  } as React.CSSProperties,
 
-  .serif-title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    color: #2c1a0e;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-  }
+  h1: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: 'clamp(2rem, 4vw, 3rem)',
+    fontWeight: 400,
+    letterSpacing: '0.04em',
+    color: C.evergreen,
+    lineHeight: 1.15,
+    margin: 0,
+  } as React.CSSProperties,
 
-  .ornament-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0 28px;
-  }
-  .ornament-divider::before,
-  .ornament-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #c9a84c55, transparent);
-  }
-  .ornament-dot {
-    width: 5px;
-    height: 5px;
-    background: #c9a84c;
-    transform: rotate(45deg);
-    flex-shrink: 0;
-  }
+  h2: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: '1.5rem',
+    fontWeight: 400,
+    letterSpacing: '0.04em',
+    color: C.evergreen,
+    marginBottom: '6px',
+  } as React.CSSProperties,
 
-  .tag-pill {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #a0722a;
-    border: 1px solid #d4a84b55;
-    padding: 3px 12px;
-    border-radius: 2px;
-    background: #fff9f0;
-    margin-bottom: 12px;
-  }
+  dividerWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    margin: '10px 0 28px',
+  } as React.CSSProperties,
+
+  dividerLine: {
+    flex: 1,
+    height: '1px',
+    background: `linear-gradient(90deg, transparent, ${C.sage}, transparent)`,
+    opacity: 0.5,
+  } as React.CSSProperties,
+
+  diamond: {
+    width: '5px',
+    height: '5px',
+    background: C.moss,
+    transform: 'rotate(45deg)',
+    flexShrink: 0,
+  } as React.CSSProperties,
 
   /* Info card */
-  .info-card {
-    background: linear-gradient(145deg, #fffdf8 0%, #fdf8ee 100%);
-    border: 1px solid #e8d5a8;
-    border-radius: 4px;
-    padding: 32px 28px;
-    box-shadow: 0 2px 12px #c9a84c0a, 0 8px 28px #c9a84c08;
-    position: relative;
-    height: fit-content;
-  }
-  .info-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, transparent, #c9a84c88, transparent);
-    border-radius: 4px 0 0 4px;
-  }
+  infoCard: {
+    background: C.bgCard,
+    border: `1px solid ${C.border}`,
+    borderRadius: '4px',
+    padding: '32px 28px',
+    boxShadow: `0 2px 12px rgba(52,76,61,0.05), 0 8px 28px rgba(52,76,61,0.04)`,
+    position: 'relative' as const,
+    height: 'fit-content' as const,
+    backdropFilter: 'blur(4px)',
+  } as React.CSSProperties,
 
-  .info-block {
-    padding: 16px 0;
-    border-bottom: 1px solid #e8d5a844;
-  }
-  .info-block:first-of-type { padding-top: 0; }
-  .info-block:last-of-type { border-bottom: none; padding-bottom: 0; }
+  infoCardBar: {
+    position: 'absolute' as const,
+    left: 0, top: 0, bottom: 0,
+    width: '2px',
+    background: `linear-gradient(180deg, transparent, ${C.sage}, transparent)`,
+    borderRadius: '4px 0 0 4px',
+    opacity: 0.7,
+  } as React.CSSProperties,
 
-  .info-block-label {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.66rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #c9a84c;
-    margin-bottom: 6px;
-  }
+  infoBlock: {
+    padding: '16px 0',
+    borderBottom: `1px solid rgba(142,165,140,0.2)`,
+  } as React.CSSProperties,
 
-  .info-block-text {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 300;
-    color: #5c3d1e;
-    line-height: 1.7;
-    letter-spacing: 0.02em;
-  }
+  infoBlockFirst: {
+    padding: '0 0 16px',
+    borderBottom: `1px solid rgba(142,165,140,0.2)`,
+  } as React.CSSProperties,
+
+  infoBlockLast: {
+    padding: '16px 0 0',
+    borderBottom: 'none',
+  } as React.CSSProperties,
+
+  infoLabel: {
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.66rem',
+    fontWeight: 600,
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    color: C.moss,
+    marginBottom: '6px',
+  } as React.CSSProperties,
+
+  infoText: {
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.88rem',
+    fontWeight: 300,
+    color: C.textMid,
+    lineHeight: 1.7,
+    letterSpacing: '0.02em',
+    margin: 0,
+  } as React.CSSProperties,
 
   /* Form card */
-  .form-card {
-    background: linear-gradient(145deg, #fffdf8 0%, #fdf8ee 100%);
-    border: 1px solid #e8d5a8;
-    border-radius: 4px;
-    padding: 32px 28px;
-    box-shadow: 0 2px 12px #c9a84c0a, 0 8px 32px #c9a84c0c;
-    position: relative;
-  }
-  .form-card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 4px;
-    background: linear-gradient(135deg, #d4a84b22, transparent 40%, transparent 60%, #d4a84b18);
-    pointer-events: none;
-    z-index: -1;
-  }
+  formCard: {
+    background: C.bgCard,
+    border: `1px solid ${C.border}`,
+    borderRadius: '4px',
+    padding: '32px 28px',
+    boxShadow: `0 2px 12px rgba(52,76,61,0.05), 0 8px 32px rgba(52,76,61,0.06)`,
+    position: 'relative' as const,
+    backdropFilter: 'blur(4px)',
+  } as React.CSSProperties,
 
-  .gold-label {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #8a6020;
-    display: block;
-    margin-bottom: 6px;
-  }
+  fieldLabel: {
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.68rem',
+    fontWeight: 500,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase' as const,
+    color: C.moss,
+    display: 'block',
+    marginBottom: '6px',
+  } as React.CSSProperties,
 
-  .warm-input {
-    width: 100%;
-    background: #fffcf5;
-    border: 1px solid #ddc87a66;
-    border-radius: 2px;
-    padding: 10px 14px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: #3a2410;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
-  }
-  .warm-input:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px #c9a84c18;
-    background: #fffef9;
-  }
-  .warm-input::placeholder { color: #c4a882; }
+  input: {
+    width: '100%',
+    background: 'rgba(255,255,255,0.85)',
+    border: `1px solid rgba(115,138,110,0.35)`,
+    borderRadius: '2px',
+    padding: '10px 14px',
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.9rem',
+    fontWeight: 300,
+    color: C.textDark,
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+    transition: 'border-color 0.2s',
+  } as React.CSSProperties,
 
-  .warm-textarea {
-    resize: none;
-    height: 120px;
-  }
+  textarea: {
+    width: '100%',
+    background: 'rgba(255,255,255,0.85)',
+    border: `1px solid rgba(115,138,110,0.35)`,
+    borderRadius: '2px',
+    padding: '10px 14px',
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.9rem',
+    fontWeight: 300,
+    color: C.textDark,
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+    resize: 'none' as const,
+    height: '120px',
+    transition: 'border-color 0.2s',
+  } as React.CSSProperties,
 
-  .gold-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #c9a84c 0%, #a8832a 100%);
-    color: #fff8ec;
-    border: none;
-    border-radius: 2px;
-    padding: 14px 20px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 16px #c9a84c44;
-  }
-  .gold-btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px #c9a84c55;
-  }
-  .gold-btn.submitted {
-    background: linear-gradient(135deg, #7a9a5a, #5a7a3a);
-    box-shadow: 0 4px 16px #7a9a5a33;
-  }
-`;
+  submitBtn: {
+    width: '100%',
+    background: C.evergreen,
+    color: C.sageHint,
+    border: 'none',
+    borderRadius: '2px',
+    padding: '14px 20px',
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.74rem',
+    fontWeight: 600,
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    cursor: 'pointer',
+    transition: 'background 0.2s, transform 0.15s',
+  } as React.CSSProperties,
 
+  submitBtnSuccess: {
+    background: C.moss,
+  } as React.CSSProperties,
+
+  responseNote: {
+    textAlign: 'center' as const,
+    fontSize: '0.7rem',
+    color: C.textLight,
+    letterSpacing: '0.06em',
+    fontWeight: 300,
+    margin: 0,
+  } as React.CSSProperties,
+};
+
+/* ─── helpers ─────────────────────────────────────────── */
+function Divider({ style }: { style?: React.CSSProperties }) {
+  return (
+    <div style={{ ...S.dividerWrap, ...style }}>
+      <div style={S.dividerLine} />
+      <div style={S.diamond} />
+      <div style={S.dividerLine} />
+    </div>
+  );
+}
+
+function InputField({
+  label, name, type = 'text', placeholder, value, onChange, required = false,
+  optional = false,
+}: {
+  label: string; name: string; type?: string; placeholder?: string;
+  value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean; optional?: boolean;
+}) {
+  return (
+    <div>
+      <label style={S.fieldLabel}>
+        {label}{optional && (
+          <span style={{ opacity: 0.5, fontWeight: 300, textTransform: 'none', letterSpacing: 0, marginLeft: '4px' }}>(optional)</span>
+        )}
+      </label>
+      <input
+        type={type} name={name} placeholder={placeholder}
+        value={value} onChange={onChange} required={required}
+        style={S.input}
+        onFocus={e => { e.target.style.borderColor = C.moss; e.target.style.boxShadow = `0 0 0 3px rgba(115,138,110,0.12)`; }}
+        onBlur={e => { e.target.style.borderColor = 'rgba(115,138,110,0.35)'; e.target.style.boxShadow = 'none'; }}
+      />
+    </div>
+  );
+}
+
+/* ─── page ────────────────────────────────────────────── */
 export default function ContactPage() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
+    name: '', email: '', phone: '', subject: '', message: '',
   });
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -232,52 +293,50 @@ export default function ContactPage() {
 
   return (
     <>
-      <style>{warmStyles}</style>
-      <div className="contact-wrap">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+      <div style={S.page}>
         <Header />
 
-        <div className="contact-inner">
+        <div style={S.inner}>
 
           {/* Page heading */}
           <div style={{ marginBottom: '8px' }}>
-            <span className="tag-pill">✦ We'd Love to Hear From You</span>
-            <h1 className="serif-title" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15 }}>
-              Contact Us
-            </h1>
+            <span style={S.tagPill}>✦ We&rsquo;d Love to Hear From You</span>
+            <h1 style={S.h1}>Contact Us</h1>
           </div>
-          <div className="ornament-divider"><div className="ornament-dot" /></div>
+          <Divider />
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', alignItems: 'start' }}>
 
-            {/* Contact Information */}
-            <div className="info-card">
-              <span className="tag-pill">✦ Get in Touch</span>
-              <h2 className="serif-title" style={{ fontSize: '1.5rem', marginBottom: '6px' }}>
-                Reach Us
-              </h2>
-              <div className="ornament-divider" style={{ margin: '10px 0 20px' }}>
-                <div className="ornament-dot" />
-              </div>
+            {/* ── Contact info ── */}
+            <div style={S.infoCard}>
+              <div style={S.infoCardBar} />
+              <span style={S.tagPill}>✦ Get in Touch</span>
+              <h2 style={S.h2}>Reach Us</h2>
+              <Divider style={{ margin: '10px 0 20px' }} />
 
-              <div className="info-block">
-                <p className="info-block-label">Email</p>
-                <p className="info-block-text">
+              <div style={S.infoBlockFirst}>
+                <p style={S.infoLabel}>Email</p>
+                <p style={S.infoText}>
                   info@skasastudios.com<br />
                   support@skasastudios.com
                 </p>
               </div>
 
-              <div className="info-block">
-                <p className="info-block-label">Phone</p>
-                <p className="info-block-text">
+              <div style={S.infoBlock}>
+                <p style={S.infoLabel}>Phone</p>
+                <p style={S.infoText}>
                   +1 (555) 123-4567<br />
-                  Monday – Friday: 10AM – 6PM
+                  Monday &ndash; Friday: 10AM &ndash; 6PM
                 </p>
               </div>
 
-              <div className="info-block">
-                <p className="info-block-label">Address</p>
-                <p className="info-block-text">
+              <div style={S.infoBlock}>
+                <p style={S.infoLabel}>Address</p>
+                <p style={S.infoText}>
                   Skasastudios Jewelry Store<br />
                   123 Jewelry Lane<br />
                   City, State 12345<br />
@@ -285,66 +344,59 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              <div className="info-block">
-                <p className="info-block-label">Business Hours</p>
-                <p className="info-block-text">
-                  Monday – Friday: 10:00 AM – 6:00 PM<br />
-                  Saturday: 11:00 AM – 5:00 PM<br />
+              <div style={S.infoBlockLast}>
+                <p style={S.infoLabel}>Business Hours</p>
+                <p style={S.infoText}>
+                  Monday &ndash; Friday: 10:00 AM &ndash; 6:00 PM<br />
+                  Saturday: 11:00 AM &ndash; 5:00 PM<br />
                   Sunday: Closed
                 </p>
               </div>
             </div>
 
-            {/* Contact Form */}
-            <div className="form-card">
-              <span className="tag-pill">✦ Send a Message</span>
-              <h2 className="serif-title" style={{ fontSize: '1.5rem', marginBottom: '6px' }}>
-                Write to Us
-              </h2>
-              <div className="ornament-divider" style={{ margin: '10px 0 24px' }}>
-                <div className="ornament-dot" />
-              </div>
+            {/* ── Contact form ── */}
+            <div style={S.formCard}>
+              <span style={S.tagPill}>✦ Send a Message</span>
+              <h2 style={S.h2}>Write to Us</h2>
+              <Divider style={{ margin: '10px 0 24px' }} />
 
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
-                  <div>
-                    <label className="gold-label">Your Name</label>
-                    <input type="text" name="name" placeholder="Aanya Sharma" value={formData.name} onChange={handleChange} required className="warm-input" />
-                  </div>
-                  <div>
-                    <label className="gold-label">Email</label>
-                    <input type="email" name="email" placeholder="aanya@example.com" value={formData.email} onChange={handleChange} required className="warm-input" />
-                  </div>
+                  <InputField label="Your Name" name="name" placeholder="Aanya Sharma"       value={formData.name}    onChange={handleChange} required />
+                  <InputField label="Email"     name="email" type="email" placeholder="aanya@example.com" value={formData.email} onChange={handleChange} required />
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '16px' }}>
-                  <div>
-                    <label className="gold-label">Phone <span style={{ opacity: 0.5, fontWeight: 300, textTransform: 'none', letterSpacing: 0 }}>(optional)</span></label>
-                    <input type="tel" name="phone" placeholder="+91 98765 43210" value={formData.phone} onChange={handleChange} className="warm-input" />
-                  </div>
-                  <div>
-                    <label className="gold-label">Subject</label>
-                    <input type="text" name="subject" placeholder="Enquiry about a piece" value={formData.subject} onChange={handleChange} required className="warm-input" />
-                  </div>
+                  <InputField label="Phone"   name="phone"   type="tel" placeholder="+91 98765 43210"      value={formData.phone}   onChange={handleChange} optional />
+                  <InputField label="Subject" name="subject" placeholder="Enquiry about a piece" value={formData.subject} onChange={handleChange} required />
                 </div>
 
                 <div>
-                  <label className="gold-label">Message</label>
-                  <textarea name="message" placeholder="Tell us how we can help you..." value={formData.message} onChange={handleChange} required className="warm-input warm-textarea" />
+                  <label style={S.fieldLabel}>Message</label>
+                  <textarea
+                    name="message"
+                    placeholder="Tell us how we can help you..."
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    style={S.textarea}
+                    onFocus={e => { e.currentTarget.style.borderColor = C.moss; e.currentTarget.style.boxShadow = `0 0 0 3px rgba(115,138,110,0.12)`; }}
+                    onBlur={e => { e.currentTarget.style.borderColor = 'rgba(115,138,110,0.35)'; e.currentTarget.style.boxShadow = 'none'; }}
+                  />
                 </div>
 
-                <div className="ornament-divider" style={{ margin: '0' }}>
-                  <div className="ornament-dot" />
-                </div>
+                <Divider style={{ margin: '0' }} />
 
-                <button type="submit" className={`gold-btn${submitted ? ' submitted' : ''}`}>
+                <button
+                  type="submit"
+                  style={{ ...S.submitBtn, ...(submitted ? S.submitBtnSuccess : {}) }}
+                >
                   {submitted ? '✦  Message Sent Successfully' : '✦  Send Message'}
                 </button>
 
-                <p style={{ textAlign: 'center', fontSize: '0.7rem', color: '#b09060', letterSpacing: '0.06em', fontWeight: 300 }}>
-                  We typically respond within 24 hours
-                </p>
+                <p style={S.responseNote}>We typically respond within 24 hours</p>
+
               </form>
             </div>
 

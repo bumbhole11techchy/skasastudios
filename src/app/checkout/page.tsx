@@ -6,9 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 declare global {
-  interface Window {
-    Razorpay: any;
-  }
+  interface Window { Razorpay: any; }
 }
 
 interface CartItem {
@@ -18,337 +16,364 @@ interface CartItem {
   quantity?: number;
 }
 
-const warmStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+/* ─── tokens ──────────────────────────────────────────── */
+const C = {
+  sageHint:  '#BFCFBB',
+  mint:      '#C8D8C4',
+  sage:      '#8EA58C',
+  moss:      '#738A6E',
+  evergreen: '#344C3D',
+  bg:        'linear-gradient(150deg, #f4f7f3 0%, #edf2eb 50%, #e6ede4 100%)',
+  bgCard:    'linear-gradient(145deg, rgba(255,255,255,0.78) 0%, rgba(237,242,235,0.65) 100%)',
+  textDark:  '#1e3028',
+  textMid:   '#4a6552',
+  textLight: '#7a9a82',
+  border:    'rgba(142,165,140,0.4)',
+  borderSoft:'rgba(142,165,140,0.22)',
+};
 
-  .checkout-wrap {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: linear-gradient(150deg, #fdf8f0 0%, #fef5e4 50%, #fdf0dc 100%);
-    font-family: 'Jost', sans-serif;
-    position: relative;
-  }
+/* ─── styles ──────────────────────────────────────────── */
+const S = {
+  page: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    background: C.bg,
+    fontFamily: "'Jost', sans-serif",
+  } as React.CSSProperties,
 
-  .checkout-wrap::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
+  inner: {
+    flex: 1,
+    maxWidth: '1080px',
+    margin: '0 auto',
+    width: '100%',
+    padding: '3rem 1.5rem',
+  } as React.CSSProperties,
 
-  .checkout-inner {
-    flex: 1;
-    max-width: 1080px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 3rem 1.5rem;
-    position: relative;
-    z-index: 1;
-  }
+  tagPill: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    fontSize: '0.65rem',
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    color: C.moss,
+    border: `1px solid rgba(115,138,110,0.38)`,
+    padding: '3px 12px',
+    borderRadius: '2px',
+    background: 'rgba(191,207,187,0.2)',
+    marginBottom: '12px',
+  } as React.CSSProperties,
 
-  .serif-title {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    color: #2c1a0e;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-  }
+  h1: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: 'clamp(2rem, 4vw, 3rem)',
+    fontWeight: 400,
+    letterSpacing: '0.04em',
+    color: C.evergreen,
+    lineHeight: 1.15,
+    margin: 0,
+  } as React.CSSProperties,
 
-  .ornament-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0 28px;
-  }
-  .ornament-divider::before,
-  .ornament-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #c9a84c55, transparent);
-  }
-  .ornament-dot {
-    width: 5px;
-    height: 5px;
-    background: #c9a84c;
-    transform: rotate(45deg);
-    flex-shrink: 0;
-  }
+  dividerWrap: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    margin: '10px 0 28px',
+  } as React.CSSProperties,
 
-  .tag-pill {
-    display: inline-flex;
-    align-items: center;
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #a0722a;
-    border: 1px solid #d4a84b55;
-    padding: 3px 12px;
-    border-radius: 2px;
-    background: #fff9f0;
-    margin-bottom: 12px;
-  }
+  dividerLine: {
+    flex: 1,
+    height: '1px',
+    background: `linear-gradient(90deg, transparent, ${C.sage}, transparent)`,
+    opacity: 0.5,
+  } as React.CSSProperties,
+
+  diamond: {
+    width: '5px',
+    height: '5px',
+    background: C.moss,
+    transform: 'rotate(45deg)',
+    flexShrink: 0,
+  } as React.CSSProperties,
 
   /* Form card */
-  .form-card {
-    background: linear-gradient(145deg, #fffdf8 0%, #fdf8ee 100%);
-    border: 1px solid #e8d5a8;
-    border-radius: 4px;
-    padding: 36px 32px;
-    box-shadow: 0 2px 12px #c9a84c0a, 0 8px 32px #c9a84c0c;
-    position: relative;
-  }
-  .form-card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 2px;
-    background: linear-gradient(180deg, transparent, #c9a84c88, transparent);
-    border-radius: 4px 0 0 4px;
-  }
+  formCard: {
+    background: C.bgCard,
+    border: `1px solid ${C.border}`,
+    borderRadius: '4px',
+    padding: '36px 32px',
+    boxShadow: `0 2px 12px rgba(52,76,61,0.05), 0 8px 32px rgba(52,76,61,0.06)`,
+    position: 'relative' as const,
+    backdropFilter: 'blur(4px)',
+  } as React.CSSProperties,
 
-  .gold-label {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #8a6020;
-    display: block;
-    margin-bottom: 6px;
-  }
+  formCardBar: {
+    position: 'absolute' as const,
+    left: 0, top: 0, bottom: 0,
+    width: '2px',
+    background: `linear-gradient(180deg, transparent, ${C.sage}, transparent)`,
+    borderRadius: '4px 0 0 4px',
+    opacity: 0.7,
+  } as React.CSSProperties,
 
-  .warm-input {
-    width: 100%;
-    background: #fffcf5;
-    border: 1px solid #ddc87a66;
-    border-radius: 2px;
-    padding: 10px 14px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: #3a2410;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
-  }
-  .warm-input:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px #c9a84c18;
-    background: #fffef9;
-  }
-  .warm-input::placeholder {
-    color: #c4a882;
-  }
+  fieldLabel: {
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.68rem',
+    fontWeight: 500,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase' as const,
+    color: C.moss,
+    display: 'block',
+    marginBottom: '6px',
+  } as React.CSSProperties,
 
-  .warm-select {
-    width: 100%;
-    background: #fffcf5;
-    border: 1px solid #ddc87a66;
-    border-radius: 2px;
-    padding: 10px 14px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 300;
-    color: #3a2410;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    cursor: pointer;
-  }
-  .warm-select:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px #c9a84c18;
-  }
+  input: {
+    width: '100%',
+    background: 'rgba(255,255,255,0.85)',
+    border: `1px solid rgba(115,138,110,0.35)`,
+    borderRadius: '2px',
+    padding: '10px 14px',
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.9rem',
+    fontWeight: 300,
+    color: C.textDark,
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+    transition: 'border-color 0.2s',
+  } as React.CSSProperties,
 
-  .field-group {
-    display: grid;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  .field-group-2 {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  }
-  .field-group-1 {
-    grid-template-columns: 1fr;
-  }
+  select: {
+    width: '100%',
+    background: 'rgba(255,255,255,0.85)',
+    border: `1px solid rgba(115,138,110,0.35)`,
+    borderRadius: '2px',
+    padding: '10px 36px 10px 14px',
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.9rem',
+    fontWeight: 300,
+    color: C.textDark,
+    outline: 'none',
+    appearance: 'none' as const,
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23738A6E'/%3E%3C/svg%3E")`,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 14px center',
+    cursor: 'pointer',
+    boxSizing: 'border-box' as const,
+  } as React.CSSProperties,
 
-  .field-wrap {
-    display: flex;
-    flex-direction: column;
-  }
+  grid2: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: '16px',
+    marginBottom: '20px',
+  } as React.CSSProperties,
 
-  .section-subheader {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: #2c1a0e;
-    letter-spacing: 0.06em;
-    margin-bottom: 20px;
-  }
+  grid1: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '16px',
+    marginBottom: '20px',
+  } as React.CSSProperties,
 
-  /* Payment button */
-  .gold-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #c9a84c 0%, #a8832a 100%);
-    color: #fff8ec;
-    border: none;
-    border-radius: 2px;
-    padding: 14px 20px;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 16px #c9a84c44;
-  }
-  .gold-btn:hover:not(:disabled) {
-    opacity: 0.9;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px #c9a84c55;
-  }
-  .gold-btn:disabled {
-    background: linear-gradient(135deg, #d4b87a, #bfa060);
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
+  fieldWrap: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+  } as React.CSSProperties,
+
+  stepBadge: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '20px',
+    height: '20px',
+    background: C.evergreen,
+    color: C.sageHint,
+    fontSize: '0.65rem',
+    fontWeight: 600,
+    borderRadius: '50%',
+    marginRight: '8px',
+    flexShrink: 0,
+  } as React.CSSProperties,
+
+  sectionSubH: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: '1.3rem',
+    fontWeight: 500,
+    color: C.evergreen,
+    letterSpacing: '0.06em',
+    margin: 0,
+  } as React.CSSProperties,
+
+  submitBtn: {
+    width: '100%',
+    background: C.evergreen,
+    color: C.sageHint,
+    border: 'none',
+    borderRadius: '2px',
+    padding: '14px 20px',
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.74rem',
+    fontWeight: 600,
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase' as const,
+    cursor: 'pointer',
+    transition: 'background 0.2s, transform 0.15s',
+  } as React.CSSProperties,
+
+  submitBtnDisabled: {
+    background: C.moss,
+    cursor: 'not-allowed',
+    opacity: 0.65,
+  } as React.CSSProperties,
+
+  securityNote: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    marginTop: '14px',
+    padding: '10px 14px',
+    background: 'rgba(191,207,187,0.18)',
+    border: `1px solid ${C.borderSoft}`,
+    borderRadius: '2px',
+    fontSize: '0.72rem',
+    color: C.moss,
+    letterSpacing: '0.04em',
+    fontWeight: 300,
+  } as React.CSSProperties,
 
   /* Summary card */
-  .summary-card {
-    background: linear-gradient(145deg, #fffdf8 0%, #fdf8ee 100%);
-    border: 1px solid #e8d5a8;
-    border-radius: 4px;
-    padding: 28px 26px;
-    box-shadow: 0 2px 12px #c9a84c0a, 0 8px 28px #c9a84c08;
-    position: relative;
-  }
-  .summary-card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 4px;
-    background: linear-gradient(135deg, #d4a84b22, transparent 40%, transparent 60%, #d4a84b18);
-    pointer-events: none;
-    z-index: -1;
-  }
+  summaryCard: {
+    background: C.bgCard,
+    border: `1px solid ${C.border}`,
+    borderRadius: '4px',
+    padding: '28px 26px',
+    boxShadow: `0 2px 12px rgba(52,76,61,0.05), 0 8px 28px rgba(52,76,61,0.04)`,
+    position: 'sticky' as const,
+    top: '1.5rem',
+    backdropFilter: 'blur(4px)',
+  } as React.CSSProperties,
 
-  .summary-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 8px 0;
-    border-bottom: 1px solid #e8d5a844;
-  }
-  .summary-item:last-of-type {
-    border-bottom: none;
-  }
-  .summary-item-name {
-    font-family: 'Jost', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 300;
-    color: #5c3d1e;
-    letter-spacing: 0.02em;
-    flex: 1;
-    margin-right: 12px;
-  }
-  .summary-item-qty {
-    font-size: 0.72rem;
-    color: #a0722a;
-    letter-spacing: 0.06em;
-  }
-  .summary-item-price {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #2c1a0e;
-    white-space: nowrap;
-  }
+  summaryH2: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: '1.5rem',
+    fontWeight: 400,
+    letterSpacing: '0.04em',
+    color: C.evergreen,
+    marginBottom: '6px',
+  } as React.CSSProperties,
 
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Jost', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 300;
-    color: #6b4a10;
-    letter-spacing: 0.03em;
-    padding: 5px 0;
-  }
-  .summary-total {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: #2c1a0e;
-    letter-spacing: 0.04em;
-    padding-top: 14px;
-  }
+  summaryItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'baseline',
+    padding: '8px 0',
+    borderBottom: `1px solid rgba(142,165,140,0.2)`,
+  } as React.CSSProperties,
 
-  .free-badge {
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    color: #7a9a5a;
-    background: #f0f7eb;
-    border: 1px solid #b8d8a055;
-    padding: 2px 10px;
-    border-radius: 2px;
-    font-weight: 500;
-  }
+  summaryItemName: {
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.85rem',
+    fontWeight: 300,
+    color: C.textMid,
+    letterSpacing: '0.02em',
+    margin: 0,
+  } as React.CSSProperties,
 
-  .security-note {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 14px;
-    padding: 10px 14px;
-    background: #fffcf5;
-    border: 1px solid #e8d5a866;
-    border-radius: 2px;
-    font-size: 0.72rem;
-    color: #8a6020;
-    letter-spacing: 0.04em;
-    font-weight: 300;
-  }
-  .security-note::before {
-    content: '🔒';
-    font-size: 0.85rem;
-  }
+  summaryItemQty: {
+    fontSize: '0.72rem',
+    color: C.sage,
+    letterSpacing: '0.06em',
+  } as React.CSSProperties,
 
-  .step-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #c9a84c, #a8832a);
-    color: #fff8ec;
-    font-size: 0.65rem;
-    font-weight: 600;
-    border-radius: 50%;
-    margin-right: 8px;
-    flex-shrink: 0;
-  }
-`;
+  summaryItemPrice: {
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: '1rem',
+    fontWeight: 500,
+    color: C.evergreen,
+    whiteSpace: 'nowrap' as const,
+  } as React.CSSProperties,
 
+  summaryRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontFamily: "'Jost', sans-serif",
+    fontSize: '0.82rem',
+    fontWeight: 300,
+    color: C.textMid,
+    letterSpacing: '0.03em',
+    padding: '5px 0',
+  } as React.CSSProperties,
+
+  summaryTotal: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    fontFamily: "'Cormorant Garamond', Georgia, serif",
+    fontSize: '1.4rem',
+    fontWeight: 500,
+    color: C.evergreen,
+    letterSpacing: '0.04em',
+    paddingTop: '14px',
+  } as React.CSSProperties,
+
+  freeBadge: {
+    fontSize: '0.7rem',
+    letterSpacing: '0.1em',
+    color: C.moss,
+    background: 'rgba(191,207,187,0.3)',
+    border: `1px solid rgba(115,138,110,0.3)`,
+    padding: '2px 10px',
+    borderRadius: '2px',
+    fontWeight: 500,
+  } as React.CSSProperties,
+
+  giftNote: {
+    marginTop: '18px',
+    textAlign: 'center' as const,
+    fontSize: '0.7rem',
+    color: C.textLight,
+    letterSpacing: '0.08em',
+    fontWeight: 300,
+    fontStyle: 'italic',
+  } as React.CSSProperties,
+};
+
+/* ─── helpers ─────────────────────────────────────────── */
+function Divider({ style }: { style?: React.CSSProperties }) {
+  return (
+    <div style={{ ...S.dividerWrap, ...style }}>
+      <div style={S.dividerLine} />
+      <div style={S.diamond} />
+      <div style={S.dividerLine} />
+    </div>
+  );
+}
+
+function Field({
+  label, name, type = 'text', placeholder, value, onChange, required = false,
+}: {
+  label: string; name: string; type?: string; placeholder?: string;
+  value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; required?: boolean;
+}) {
+  return (
+    <div style={S.fieldWrap}>
+      <label style={S.fieldLabel}>{label}</label>
+      <input
+        type={type} name={name} placeholder={placeholder}
+        value={value} onChange={onChange} required={required}
+        style={S.input}
+        onFocus={e => { e.target.style.borderColor = C.moss; e.target.style.boxShadow = `0 0 0 3px rgba(115,138,110,0.12)`; }}
+        onBlur={e => { e.target.style.borderColor = 'rgba(115,138,110,0.35)'; e.target.style.boxShadow = 'none'; }}
+      />
+    </div>
+  );
+}
+
+/* ─── page ────────────────────────────────────────────── */
 export default function CheckoutPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    street: '',
-    city: '',
-    state: '',
-    zipCode: '',
-    country: 'India',
+    name: '', email: '', phone: '',
+    street: '', city: '', state: '', zipCode: '', country: 'India',
   });
   const [loading, setLoading] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -357,19 +382,17 @@ export default function CheckoutPage() {
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     setCartItems(cart);
-    const totalAmount = cart.reduce((sum: number, item: any) => sum + item.price * (item.quantity || 1), 0);
-    setTotal(totalAmount);
+    setTotal(cart.reduce((sum: number, item: any) => sum + item.price * (item.quantity || 1), 0));
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       const orderResponse = await fetch('/api/razorpay/create-order', {
         method: 'POST',
@@ -380,16 +403,12 @@ export default function CheckoutPage() {
           customerEmail: formData.email,
           customerPhone: formData.phone,
           shippingAddress: {
-            street: formData.street,
-            city: formData.city,
-            state: formData.state,
-            zipCode: formData.zipCode,
-            country: formData.country,
+            street: formData.street, city: formData.city,
+            state: formData.state, zipCode: formData.zipCode, country: formData.country,
           },
           totalAmount: total,
         }),
       });
-
       if (!orderResponse.ok) throw new Error('Failed to create order');
       const orderData = await orderResponse.json();
 
@@ -413,25 +432,14 @@ export default function CheckoutPage() {
                   razorpaySignature: response.razorpay_signature,
                 }),
               });
-
               if (verifyResponse.ok) {
                 localStorage.removeItem('cart');
                 router.push(`/order-success?orderId=${orderData.orderId}`);
-              } else {
-                alert('Payment verification failed');
-              }
-            } catch (error) {
-              console.error('Payment verification error:', error);
-              alert('Payment verification failed');
-            }
+              } else { alert('Payment verification failed'); }
+            } catch { alert('Payment verification failed'); }
           },
-          prefill: {
-            name: formData.name,
-            email: formData.email,
-            contact: formData.phone,
-          },
+          prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         };
-
         const razorpay = new window.Razorpay(options);
         razorpay.open();
       };
@@ -446,85 +454,68 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: warmStyles }} />
-      <div className="checkout-wrap">
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+      <div style={S.page}>
         <Header />
 
-        <div className="checkout-inner">
+        <div style={S.inner}>
 
           {/* Page heading */}
           <div style={{ marginBottom: '8px' }}>
-            <span className="tag-pill">✦ Secure Checkout</span>
-            <h1 className="serif-title" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15 }}>
-              Complete Your Order
-            </h1>
+            <span style={S.tagPill}>✦ Secure Checkout</span>
+            <h1 style={S.h1}>Complete Your Order</h1>
           </div>
-          <div className="ornament-divider"><div className="ornament-dot" /></div>
+          <Divider />
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', alignItems: 'start' }}>
 
-            {/* Shipping Form */}
+            {/* ── Shipping form ── */}
             <div style={{ gridColumn: 'span 1' }}>
-              <div className="form-card">
+              <div style={S.formCard}>
+                <div style={S.formCardBar} />
+
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '6px' }}>
-                  <span className="step-badge">1</span>
-                  <h2 className="section-subheader" style={{ margin: 0 }}>Shipping Information</h2>
+                  <span style={S.stepBadge}>1</span>
+                  <h2 style={S.sectionSubH}>Shipping Information</h2>
                 </div>
-                <div className="ornament-divider" style={{ margin: '12px 0 24px' }}>
-                  <div className="ornament-dot" />
-                </div>
+                <Divider style={{ margin: '12px 0 24px' }} />
 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
 
-                  <div className="field-group field-group-2">
-                    <div className="field-wrap">
-                      <label className="gold-label">Full Name</label>
-                      <input type="text" name="name" placeholder="Aanya Sharma" value={formData.name} onChange={handleChange} required className="warm-input" />
-                    </div>
-                    <div className="field-wrap">
-                      <label className="gold-label">Email</label>
-                      <input type="email" name="email" placeholder="aanya@example.com" value={formData.email} onChange={handleChange} required className="warm-input" />
-                    </div>
+                  <div style={S.grid2}>
+                    <Field label="Full Name"     name="name"  placeholder="Aanya Sharma"        value={formData.name}  onChange={handleChange} required />
+                    <Field label="Email"          name="email" type="email" placeholder="aanya@example.com" value={formData.email} onChange={handleChange} required />
                   </div>
 
-                  <div className="field-group field-group-2" style={{ marginBottom: '20px' }}>
-                    <div className="field-wrap">
-                      <label className="gold-label">Phone Number</label>
-                      <input type="tel" name="phone" placeholder="+91 98765 43210" value={formData.phone} onChange={handleChange} required className="warm-input" />
-                    </div>
+                  <div style={S.grid2}>
+                    <Field label="Phone Number"  name="phone" type="tel" placeholder="+91 98765 43210" value={formData.phone} onChange={handleChange} required />
                   </div>
 
+                  {/* Step 2 */}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px', marginTop: '8px' }}>
-                    <span className="step-badge">2</span>
-                    <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '1.2rem', color: '#2c1a0e', fontWeight: 500, letterSpacing: '0.06em' }}>Delivery Address</span>
+                    <span style={S.stepBadge}>2</span>
+                    <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: '1.2rem', color: C.evergreen, fontWeight: 500, letterSpacing: '0.06em' }}>
+                      Delivery Address
+                    </span>
                   </div>
 
-                  <div className="field-group field-group-1" style={{ marginBottom: '20px' }}>
-                    <div className="field-wrap">
-                      <label className="gold-label">Street Address</label>
-                      <input type="text" name="street" placeholder="12, Rose Lane, MG Road" value={formData.street} onChange={handleChange} required className="warm-input" />
-                    </div>
+                  <div style={S.grid1}>
+                    <Field label="Street Address" name="street" placeholder="12, Rose Lane, MG Road" value={formData.street} onChange={handleChange} required />
                   </div>
 
-                  <div className="field-group field-group-2">
-                    <div className="field-wrap">
-                      <label className="gold-label">City</label>
-                      <input type="text" name="city" placeholder="Mumbai" value={formData.city} onChange={handleChange} required className="warm-input" />
-                    </div>
-                    <div className="field-wrap">
-                      <label className="gold-label">State</label>
-                      <input type="text" name="state" placeholder="Maharashtra" value={formData.state} onChange={handleChange} required className="warm-input" />
-                    </div>
+                  <div style={S.grid2}>
+                    <Field label="City"  name="city"  placeholder="Mumbai"      value={formData.city}  onChange={handleChange} required />
+                    <Field label="State" name="state" placeholder="Maharashtra" value={formData.state} onChange={handleChange} required />
                   </div>
 
-                  <div className="field-group field-group-2">
-                    <div className="field-wrap">
-                      <label className="gold-label">ZIP Code</label>
-                      <input type="text" name="zipCode" placeholder="400 001" value={formData.zipCode} onChange={handleChange} required className="warm-input" />
-                    </div>
-                    <div className="field-wrap">
-                      <label className="gold-label">Country</label>
-                      <select name="country" value={formData.country} onChange={handleChange} className="warm-select">
+                  <div style={S.grid2}>
+                    <Field label="ZIP Code" name="zipCode" placeholder="400 001" value={formData.zipCode} onChange={handleChange} required />
+                    <div style={S.fieldWrap}>
+                      <label style={S.fieldLabel}>Country</label>
+                      <select name="country" value={formData.country} onChange={handleChange} style={S.select}>
                         <option value="India">India</option>
                         <option value="USA">USA</option>
                         <option value="UK">UK</option>
@@ -534,77 +525,67 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  <div className="ornament-divider" style={{ margin: '12px 0' }}>
-                    <div className="ornament-dot" />
-                  </div>
+                  <Divider style={{ margin: '12px 0' }} />
 
-                  <button type="submit" disabled={loading} className="gold-btn">
-                    {loading ? 'Processing...' : '✦  Proceed to Payment'}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    style={{ ...S.submitBtn, ...(loading ? S.submitBtnDisabled : {}) }}
+                  >
+                    {loading ? 'Processing…' : '✦  Proceed to Payment'}
                   </button>
 
-                  <div className="security-note">
+                  <div style={S.securityNote}>
+                    <span>🔒</span>
                     Payments secured by Razorpay · 256-bit SSL encryption
                   </div>
+
                 </form>
               </div>
             </div>
 
-            {/* Order Summary */}
-            <div className="summary-card" style={{ position: 'sticky', top: '1.5rem' }}>
-              <span className="tag-pill">✦ Order Summary</span>
-              <h2 className="serif-title" style={{ fontSize: '1.5rem', marginBottom: '6px' }}>Your Selection</h2>
-              <div className="ornament-divider" style={{ margin: '10px 0 18px' }}>
-                <div className="ornament-dot" />
-              </div>
+            {/* ── Order summary ── */}
+            <div style={S.summaryCard}>
+              <span style={S.tagPill}>✦ Order Summary</span>
+              <h2 style={S.summaryH2}>Your Selection</h2>
+              <Divider style={{ margin: '10px 0 18px' }} />
 
-              {/* Items */}
               <div style={{ marginBottom: '16px' }}>
                 {cartItems.map((item, index) => (
-                  <div key={index} className="summary-item">
+                  <div key={index} style={S.summaryItem}>
                     <div style={{ flex: 1, marginRight: '12px' }}>
-                      <p className="summary-item-name">{item.name}</p>
-                      <p className="summary-item-qty">Qty: {item.quantity || 1}</p>
+                      <p style={S.summaryItemName}>{item.name}</p>
+                      <p style={S.summaryItemQty}>Qty: {item.quantity || 1}</p>
                     </div>
-                    <span className="summary-item-price">
+                    <span style={S.summaryItemPrice}>
                       ₹{(item.price * (item.quantity || 1)).toLocaleString('en-IN')}
                     </span>
                   </div>
                 ))}
               </div>
 
-              {/* Totals */}
-              <div style={{ borderTop: '1px solid #e8d5a8', paddingTop: '14px' }}>
-                <div className="summary-row">
+              <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: '14px' }}>
+                <div style={S.summaryRow}>
                   <span>Subtotal</span>
                   <span>₹{total.toLocaleString('en-IN')}</span>
                 </div>
-                <div className="summary-row">
+                <div style={S.summaryRow}>
                   <span>Shipping</span>
-                  <span className="free-badge">Free</span>
+                  <span style={S.freeBadge}>Free</span>
                 </div>
-                <div className="summary-row" style={{ fontStyle: 'italic', color: '#a0722a', fontSize: '0.78rem' }}>
+                <div style={{ ...S.summaryRow, fontStyle: 'italic', color: C.sage, fontSize: '0.78rem' }}>
                   <span>Complimentary gift wrap</span>
                   <span>✦</span>
                 </div>
-                <div style={{ borderTop: '1px solid #e8d5a8', marginTop: '10px' }}>
-                  <div className="summary-total">
+                <div style={{ borderTop: `1px solid ${C.border}`, marginTop: '10px' }}>
+                  <div style={S.summaryTotal}>
                     <span>Total</span>
                     <span>₹{total.toLocaleString('en-IN')}</span>
                   </div>
                 </div>
               </div>
 
-              <p style={{
-                marginTop: '18px',
-                textAlign: 'center',
-                fontSize: '0.7rem',
-                color: '#b09060',
-                letterSpacing: '0.08em',
-                fontWeight: 300,
-                fontStyle: 'italic',
-              }}>
-                Every piece arrives in our signature gift box
-              </p>
+              <p style={S.giftNote}>Every piece arrives in our signature gift box</p>
             </div>
 
           </div>

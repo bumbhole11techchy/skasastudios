@@ -6,14 +6,14 @@ import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-const warmStyles = `
+const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
 
   .success-wrap {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(150deg, #fdf8f0 0%, #fef5e4 50%, #fdf0dc 100%);
+    background: linear-gradient(150deg, #f4f7f3 0%, #edf2eb 50%, #e6ede4 100%);
     font-family: 'Jost', sans-serif;
     position: relative;
   }
@@ -38,19 +38,19 @@ const warmStyles = `
   }
 
   .success-card {
-    background: linear-gradient(145deg, #fffdf8 0%, #fdf8ee 100%);
-    border: 1px solid #e8d5a8;
+    background: linear-gradient(145deg, rgba(255,255,255,0.78) 0%, rgba(237,242,235,0.65) 100%);
+    border: 1px solid rgba(142,165,140,0.4);
     border-radius: 4px;
     padding: 52px 48px;
     max-width: 560px;
     width: 100%;
     text-align: center;
     box-shadow:
-      0 2px 4px #c9a84c0a,
-      0 8px 32px #c9a84c12,
-      0 32px 64px #c9a84c08,
-      inset 0 1px 0 #fff8ec;
+      0 2px 12px rgba(52,76,61,0.05),
+      0 8px 32px rgba(52,76,61,0.06),
+      inset 0 1px 0 rgba(255,255,255,0.8);
     position: relative;
+    backdrop-filter: blur(4px);
   }
 
   .success-card::before {
@@ -58,14 +58,14 @@ const warmStyles = `
     position: absolute;
     inset: -1px;
     border-radius: 4px;
-    background: linear-gradient(135deg, #d4a84b33, transparent 40%, transparent 60%, #d4a84b22);
+    background: linear-gradient(135deg, rgba(142,165,140,0.2), transparent 40%, transparent 60%, rgba(115,138,110,0.12));
     pointer-events: none;
     z-index: -1;
   }
 
   .serif-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    color: #2c1a0e;
+    color: #344C3D;
     font-weight: 400;
     letter-spacing: 0.04em;
   }
@@ -82,12 +82,12 @@ const warmStyles = `
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #c9a84c55, transparent);
+    background: linear-gradient(90deg, transparent, rgba(142,165,140,0.5), transparent);
   }
   .ornament-dot {
     width: 5px;
     height: 5px;
-    background: #c9a84c;
+    background: #738A6E;
     transform: rotate(45deg);
     flex-shrink: 0;
   }
@@ -98,15 +98,15 @@ const warmStyles = `
     font-size: 0.65rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #a0722a;
-    border: 1px solid #d4a84b55;
+    color: #738A6E;
+    border: 1px solid rgba(115,138,110,0.38);
     padding: 3px 12px;
     border-radius: 2px;
-    background: #fff9f0;
+    background: rgba(191,207,187,0.2);
     margin-bottom: 20px;
   }
 
-  /* Gold checkmark medallion */
+  /* Sage medallion */
   .check-medallion {
     width: 80px;
     height: 80px;
@@ -117,12 +117,12 @@ const warmStyles = `
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #fef3d4, #fdf0c0);
-    border: 2px solid #c9a84c66;
+    background: linear-gradient(135deg, #e8efe6, #dce8d9);
+    border: 2px solid rgba(142,165,140,0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px #c9a84c22, inset 0 1px 0 #fff8ec;
+    box-shadow: 0 4px 20px rgba(115,138,110,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
     position: relative;
   }
   .check-medallion-ring::before {
@@ -130,19 +130,19 @@ const warmStyles = `
     position: absolute;
     inset: 4px;
     border-radius: 50%;
-    border: 1px solid #c9a84c33;
+    border: 1px solid rgba(115,138,110,0.25);
   }
   .check-icon {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
-    color: #a0722a;
+    color: #738A6E;
     line-height: 1;
   }
 
   /* Order ID block */
   .order-id-block {
-    background: #fffcf5;
-    border: 1px solid #e8d5a8;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(142,165,140,0.4);
     border-radius: 2px;
     padding: 12px 20px;
     margin: 20px 0;
@@ -156,21 +156,21 @@ const warmStyles = `
     font-size: 0.62rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #c9a84c;
+    color: #8EA58C;
     font-weight: 600;
   }
   .order-id-value {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.15rem;
     font-weight: 500;
-    color: #2c1a0e;
+    color: #1e3028;
     letter-spacing: 0.06em;
   }
 
   /* Info box */
   .info-box {
-    background: linear-gradient(90deg, #fdf6e3, #fef9ed);
-    border: 1px solid #e8d5a888;
+    background: linear-gradient(90deg, rgba(237,242,235,0.7), rgba(244,247,243,0.5));
+    border: 1px solid rgba(142,165,140,0.3);
     border-radius: 2px;
     padding: 18px 20px;
     margin: 24px 0;
@@ -182,68 +182,70 @@ const warmStyles = `
     position: absolute;
     left: 0; top: 0; bottom: 0;
     width: 2px;
-    background: linear-gradient(180deg, transparent, #c9a84c88, transparent);
+    background: linear-gradient(180deg, transparent, rgba(142,165,140,0.6), transparent);
     border-radius: 2px 0 0 2px;
   }
   .info-box p {
     font-family: 'Jost', sans-serif;
     font-size: 0.85rem;
     font-weight: 300;
-    color: #5c3d1e;
+    color: #4a6552;
     line-height: 1.7;
     letter-spacing: 0.02em;
     margin: 0 0 8px;
   }
   .info-box p:last-child { margin: 0; }
 
-  /* Buttons */
-  .gold-btn {
+  /* Primary button */
+  .primary-btn {
     display: inline-block;
-    background: linear-gradient(135deg, #c9a84c 0%, #a8832a 100%);
-    color: #fff8ec;
+    background: #344C3D;
+    color: #BFCFBB;
     border: none;
     border-radius: 2px;
     padding: 13px 28px;
     font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s, box-shadow 0.15s;
-    box-shadow: 0 4px 16px #c9a84c44;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(52,76,61,0.2);
   }
-  .gold-btn:hover {
-    opacity: 0.9;
+  .primary-btn:hover {
+    background: #2a3d31;
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px #c9a84c55;
+    box-shadow: 0 6px 20px rgba(52,76,61,0.28);
   }
 
+  /* Ghost button */
   .ghost-btn {
     display: inline-block;
     background: transparent;
-    border: 1px solid #c9a84c88;
-    color: #8a6020;
+    border: 1px solid rgba(115,138,110,0.5);
+    color: #738A6E;
     border-radius: 2px;
     padding: 12px 28px;
     font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
   .ghost-btn:hover {
-    background: #c9a84c11;
-    color: #6b4a10;
+    background: rgba(115,138,110,0.1);
+    color: #344C3D;
+    border-color: rgba(115,138,110,0.7);
   }
 
   .ornament-bottom {
     text-align: center;
-    color: #c9a84c;
+    color: #8EA58C;
     font-size: 1.1rem;
     letter-spacing: 0.4em;
     opacity: 0.5;
@@ -256,7 +258,7 @@ const warmStyles = `
     align-items: center;
     justify-content: center;
     font-family: 'Jost', sans-serif;
-    color: #8a6020;
+    color: #738A6E;
     font-size: 0.85rem;
     letter-spacing: 0.1em;
   }
@@ -277,7 +279,7 @@ function OrderSuccessContent() {
           </div>
         </div>
 
-        <span className="tag-pill">Order Confirmed</span>
+        <span className="tag-pill">✦ Order Confirmed</span>
 
         <h1 className="serif-title" style={{ fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', lineHeight: 1.2, marginBottom: '10px' }}>
           Order Placed Successfully
@@ -287,7 +289,7 @@ function OrderSuccessContent() {
           fontFamily: "'Jost', sans-serif",
           fontSize: '0.9rem',
           fontWeight: 300,
-          color: '#8a6020',
+          color: '#7a9a82',
           letterSpacing: '0.04em',
           marginBottom: '4px',
         }}>
@@ -312,7 +314,7 @@ function OrderSuccessContent() {
 
         {/* CTA Buttons */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', marginTop: '8px' }}>
-          <Link href="/products" className="gold-btn">
+          <Link href="/products" className="primary-btn">
             ✦ &nbsp;Continue Shopping
           </Link>
           <Link href="/" className="ghost-btn">
@@ -329,7 +331,7 @@ function OrderSuccessContent() {
 export default function OrderSuccessPage() {
   return (
     <>
-      <style>{warmStyles}</style>
+      <style>{styles}</style>
       <div className="success-wrap">
         <Header />
 

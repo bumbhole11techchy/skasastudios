@@ -5,14 +5,14 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 
-const warmStyles = `
+const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
 
   .products-wrap {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(150deg, #fdf8f0 0%, #fef5e4 50%, #fdf0dc 100%);
+    background: linear-gradient(150deg, #f4f7f3 0%, #edf2eb 50%, #e6ede4 100%);
     font-family: 'Jost', sans-serif;
     position: relative;
   }
@@ -38,7 +38,7 @@ const warmStyles = `
 
   .serif-title {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    color: #2c1a0e;
+    color: #344C3D;
     font-weight: 400;
     letter-spacing: 0.04em;
   }
@@ -54,12 +54,12 @@ const warmStyles = `
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, #c9a84c55, transparent);
+    background: linear-gradient(90deg, transparent, rgba(142,165,140,0.5), transparent);
   }
   .ornament-dot {
     width: 5px;
     height: 5px;
-    background: #c9a84c;
+    background: #738A6E;
     transform: rotate(45deg);
     flex-shrink: 0;
   }
@@ -70,58 +70,58 @@ const warmStyles = `
     font-size: 0.65rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: #a0722a;
-    border: 1px solid #d4a84b55;
+    color: #738A6E;
+    border: 1px solid rgba(115,138,110,0.38);
     padding: 3px 12px;
     border-radius: 2px;
-    background: #fff9f0;
+    background: rgba(191,207,187,0.2);
     margin-bottom: 12px;
   }
 
   /* Search input */
-  .warm-search {
+  .sage-search {
     flex: 1;
-    background: #fffcf5;
-    border: 1px solid #ddc87a66;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(115,138,110,0.35);
     border-radius: 2px;
     padding: 10px 16px;
     font-family: 'Jost', sans-serif;
     font-size: 0.88rem;
     font-weight: 300;
-    color: #3a2410;
+    color: #1e3028;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     min-width: 0;
   }
-  .warm-search:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px #c9a84c18;
-    background: #fffef9;
+  .sage-search:focus {
+    border-color: #738A6E;
+    box-shadow: 0 0 0 3px rgba(115,138,110,0.12);
+    background: #ffffff;
   }
-  .warm-search::placeholder { color: #c4a882; }
+  .sage-search::placeholder { color: #a8c0a4; }
 
   /* Category select */
-  .warm-select {
-    background: #fffcf5;
-    border: 1px solid #ddc87a66;
+  .sage-select {
+    background: rgba(255,255,255,0.85);
+    border: 1px solid rgba(115,138,110,0.35);
     border-radius: 2px;
     padding: 10px 38px 10px 16px;
     font-family: 'Jost', sans-serif;
     font-size: 0.85rem;
     font-weight: 300;
-    color: #3a2410;
+    color: #1e3028;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
     appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23738A6E'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
     cursor: pointer;
     min-width: 180px;
   }
-  .warm-select:focus {
-    border-color: #c9a84c;
-    box-shadow: 0 0 0 3px #c9a84c18;
+  .sage-select:focus {
+    border-color: #738A6E;
+    box-shadow: 0 0 0 3px rgba(115,138,110,0.12);
   }
 
   /* Category pill buttons */
@@ -131,24 +131,24 @@ const warmStyles = `
     font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #a0722a;
-    border: 1px solid #d4a84b55;
+    color: #738A6E;
+    border: 1px solid rgba(115,138,110,0.38);
     padding: 6px 16px;
     border-radius: 2px;
-    background: #fff9f0;
+    background: rgba(191,207,187,0.2);
     cursor: pointer;
     transition: background 0.18s, border-color 0.18s, color 0.18s;
     white-space: nowrap;
   }
   .cat-btn:hover {
-    background: #fef3d4;
-    border-color: #c9a84c;
-    color: #6b4a10;
+    background: rgba(191,207,187,0.45);
+    border-color: rgba(115,138,110,0.6);
+    color: #344C3D;
   }
   .cat-btn.active {
-    background: linear-gradient(135deg, #c9a84c, #a8832a);
+    background: #344C3D;
     border-color: transparent;
-    color: #fff8ec;
+    color: #BFCFBB;
   }
 
   /* Loading */
@@ -163,8 +163,8 @@ const warmStyles = `
   .loading-spinner {
     width: 28px;
     height: 28px;
-    border: 2px solid #e8d5a8;
-    border-top-color: #c9a84c;
+    border: 2px solid rgba(142,165,140,0.3);
+    border-top-color: #738A6E;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
   }
@@ -188,7 +188,7 @@ const warmStyles = `
   .results-count {
     font-size: 0.75rem;
     letter-spacing: 0.1em;
-    color: #b09060;
+    color: #7a9a82;
     font-weight: 300;
     margin-left: auto;
   }
@@ -223,13 +223,13 @@ export default function ProductsPage() {
   const filteredProducts = products?.filter((product: any) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  ) || [];
 
   const categories = ['Rings', 'Necklaces', 'Bracelets', 'Earrings', 'Pendants'];
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: warmStyles }} />
+      <style dangerouslySetInnerHTML={{ __html: styles }} />
       <div className="products-wrap">
         <Header />
 
@@ -254,12 +254,12 @@ export default function ProductsPage() {
                 placeholder="Search pieces..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="warm-search"
+                className="sage-search"
               />
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="warm-select"
+                className="sage-select"
               >
                 <option value="">All Categories</option>
                 {categories.map((cat) => (
@@ -306,7 +306,7 @@ export default function ProductsPage() {
               <p style={{
                 fontFamily: "'Jost', sans-serif",
                 fontSize: '0.82rem',
-                color: '#a0722a',
+                color: '#738A6E',
                 letterSpacing: '0.1em',
                 fontWeight: 300,
               }}>
@@ -330,14 +330,14 @@ export default function ProductsPage() {
                 fontSize: '1.5rem',
                 fontStyle: 'italic',
                 fontWeight: 300,
-                color: '#8a6020',
+                color: '#4a6552',
                 marginBottom: '8px',
               }}>
                 No pieces found
               </p>
               <p style={{
                 fontSize: '0.82rem',
-                color: '#b09060',
+                color: '#7a9a82',
                 letterSpacing: '0.04em',
                 fontWeight: 300,
               }}>

@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta name="theme-color" content="#8B7355" />
+        <meta name="theme-color" content="#344C3D" />
       </head>
       <body>
         {children}
